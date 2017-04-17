@@ -1,5 +1,6 @@
 var socket;
 var bird;
+var enemy;
 var pipes = [];
 
 function setup() {
@@ -7,42 +8,45 @@ function setup() {
   background(0);
 
   socket = io.connect('http://localhost:3000');
-  // We make a named event called 'mouse' and write an
-  // anonymous callback function
+  // event called 'mouse' and write an anonymous callback function
   socket.on('key',
-    // When we receive data
     function(data) {
-      console.log("Got: " + data.fc);
-      // Draw a blue circle
-      fill(0,0,255);
-      noStroke();
-      ellipse(data.x, data.y, 20, 20);
+      console.log("Got: " + data.fc + ", CF: " + frameCount + ", diff:" + (data.cf-frameCount));
+      enemy.up();
     }
   );
 
-  bird = new Bird();
+  bird = new Bird(0);
+  enemy = new Bird(1);
 	pipes.push(new Pipe());
 }
 
 function draw() {
   background(30);
 
-	for (var i = pipes.length-1; i >= 0; i--) {
-		pipes[i].show();
-		pipes[i].update();
+	// for (var i = pipes.length-1; i >= 0; i--) {
+	// 	pipes[i].show();
+	// 	pipes[i].update();
 
-		if (pipes[i].hits(bird)) {
-			console.log("HIT");
-			bird.size++;
-		}
+	// 	if (pipes[i].hits(bird)) {
+	// 		console.log("HIT");
+	// 		bird.size++;
+	// 	}
 
-		if (pipes[i].offscreen()) {
-			pipes.splice(i, 1);
-		}
-	}
+  //   if (pipes[i].hits(enemy)) {
+	// 		console.log("HIT");
+	// 		enemy.size++;
+	// 	}
+
+	// 	if (pipes[i].offscreen()) {
+	// 		pipes.splice(i, 1);
+	// 	}
+	// }
 
 	bird.update();
-	bird.show();
+  enemy.update();
+  bird.show();
+  enemy.show();
 
 	if (frameCount % 60 == 0) {
 		pipes.push(new Pipe());
@@ -51,20 +55,15 @@ function draw() {
 
 function keyPressed() {
 	if (key == ' ') {
-    console.log("SPACE");
 		bird.up();
     sendKey(frameCount);
 	}
 }
 
-// function mouseDragged() {
-//   // Draw some white circles
-//   fill(255);
-//   noStroke();
-//   ellipse(mouseX,mouseY,20,20);
-//   // Send the mouse coordinates
-//   sendmouse(mouseX,mouseY);
-// }
+function mousePressed() {
+  bird.up();
+  sendKey(frameCount);
+}
 
 function sendKey(frameCount) {
   console.log("send key: " + frameCount);
@@ -75,18 +74,3 @@ function sendKey(frameCount) {
 
   socket.emit('key', data);
 }
-
-// Function for sending to the socket
-// function sendmouse(xpos, ypos) {
-//   // We are sending!
-//   console.log("sendmouse: " + xpos + " " + ypos);
-  
-//   // Make a little object with  and y
-//   var data = {
-//     x: xpos,
-//     y: ypos
-//   };
-
-//   // Send that object to the socket
-//   socket.emit('mouse',data);
-// }

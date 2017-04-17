@@ -1,4 +1,11 @@
-function Bird() {
+function Bird(color) {
+	this.color = -1;
+	
+	if (color == 0)
+		this.color = 0;
+	else
+		this.color = 1;
+
 	this.y = height/2;
 	this.x = 50;
 	this.size = 32;
@@ -8,7 +15,10 @@ function Bird() {
 	this.velocity = 0;
 
 	this.show = function() {
-		fill(255);
+		if (this.color == 0)
+			fill(255);
+		else
+			fill(255, 60, 60);
 		ellipse(this.x, this.y, this.size, this.size);
 	}
 
