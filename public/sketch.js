@@ -7,7 +7,7 @@ function setup() {
   createCanvas(400, 600);
   background(0);
 
-  socket = io.connect('http://localhost:3000');
+  socket = io.connect('http://localhost:5000');
   // event called 'mouse' and write an anonymous callback function
   socket.on('key',
     function(data) {
@@ -24,24 +24,24 @@ function setup() {
 function draw() {
   background(30);
 
-	// for (var i = pipes.length-1; i >= 0; i--) {
-	// 	pipes[i].show();
-	// 	pipes[i].update();
+	for (var i = pipes.length-1; i >= 0; i--) {
+		pipes[i].show();
+		pipes[i].update();
 
-	// 	if (pipes[i].hits(bird)) {
-	// 		console.log("HIT");
-	// 		bird.size++;
-	// 	}
+		if (pipes[i].hits(bird)) {
+			console.log("HIT");
+			bird.size++;
+		}
 
-  //   if (pipes[i].hits(enemy)) {
-	// 		console.log("HIT");
-	// 		enemy.size++;
-	// 	}
+    if (pipes[i].hits(enemy)) {
+			console.log("HIT");
+			enemy.size++;
+		}
 
-	// 	if (pipes[i].offscreen()) {
-	// 		pipes.splice(i, 1);
-	// 	}
-	// }
+		if (pipes[i].offscreen()) {
+			pipes.splice(i, 1);
+		}
+	}
 
 	bird.update();
   enemy.update();
@@ -55,12 +55,14 @@ function draw() {
 
 function keyPressed() {
 	if (key == ' ') {
+    console.log("sendKey " + frameCount);
 		bird.up();
     sendKey(frameCount);
 	}
 }
 
 function mousePressed() {
+  console.log("sendKey " + frameCount);
   bird.up();
   sendKey(frameCount);
 }
