@@ -7,8 +7,7 @@ function setup() {
   createCanvas(400, 600);
   background(0);
 
-  // socket = io.connect('http://localhost:5000');
-  socket = io());
+  socket = io.connect('http://localhost:5000');
   // event called 'mouse' and write an anonymous callback function
   socket.on('key',
     function(data) {
