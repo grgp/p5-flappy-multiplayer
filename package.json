@@ -1,0 +1,21 @@
+{
+  "name": "jumper-w-sockets",
+  "version": "1.0.0",
+  "description": "Multiplayer Jumper-like game with sockets.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jumper",
+    "sockets",
+    "multiplayer",
+    "p5.js"
+  ],
+  "author": "grgp",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3"
+  }
+}
