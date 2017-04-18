@@ -7,8 +7,8 @@ function setup() {
   createCanvas(400, 600);
   background(0);
 
-  socket = io.connect('http://localhost:5000');
-  // socket = io.connect('https://p5jumpy.herokuapp.com');
+  // socket = io.connect('http://localhost:5000');
+  socket = io.connect('https://p5jumpy.herokuapp.com');
   
   // event called 'mouse' and write an anonymous callback function
   socket.on('key',
