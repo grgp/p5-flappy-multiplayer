@@ -41,7 +41,7 @@ function draw() {
 
 		if (pipes[i].hits(bird)) {
       if (bird.color == 0) {
-        bird.size += 0.8;
+        bird.size += 0.25;
         // frameCount = 0;
         // sendHit(bird.size, frameCount);
       }
