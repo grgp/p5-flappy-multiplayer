@@ -27,6 +27,15 @@ function setup() {
     }
   );
 
+  socket.on('clean',
+    function() {
+        pipes = [];
+        bird = new Bird(0);
+        enemy = new Bird(1);
+        pipes.push(new Pipe());
+    }
+  );
+
   bird = new Bird(0);
   enemy = new Bird(1);
 	pipes.push(new Pipe());
@@ -59,7 +68,7 @@ function draw() {
 
   frameCounter();
 
-	if (frameCount % 10 == 0) {
+	if (frameCount % 5 == 0) {
 		pipes.push(new Pipe());
     if (bird.size > 40)
       bird.size -= 0.005 * bird.size;
@@ -84,7 +93,7 @@ function keyPressed() {
 function mousePressed() {
   console.log("sendKey " + frameCount);
   bird.up();
-  sendKey(frameCount);
+  sendKey(frameCount, bird);
 }
 
 function sendKey(frameCount, bird) {

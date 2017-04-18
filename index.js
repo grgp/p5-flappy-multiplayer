@@ -58,6 +58,7 @@ io.sockets.on('connection',
     
     socket.on('disconnect', function() {
       console.log("Client has disconnected");
+      io.socket.emit('clean');
     });
   }
 );
