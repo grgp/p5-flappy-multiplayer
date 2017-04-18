@@ -27,15 +27,6 @@ function setup() {
     }
   );
 
-  socket.on('clean',
-    function() {
-        pipes = [];
-        bird = new Bird(0);
-        enemy = new Bird(1);
-        pipes.push(new Pipe());
-    }
-  );
-
   bird = new Bird(0);
   enemy = new Bird(1);
 	pipes.push(new Pipe());
