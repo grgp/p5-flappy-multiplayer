@@ -38,7 +38,7 @@ io.sockets.on('connection',
     socket.on('key',
       function(data) {
         // Data comes in as whatever was sent, including objects
-        console.log("Received: 'key' " + data.fc);
+        console.log("Received: 'key' " + data.fc + " size: " + data.size);
       
         // Send it to all other clients
         socket.broadcast.emit('key', data);
@@ -46,6 +46,13 @@ io.sockets.on('connection',
         // This is a way to send to everyone including sender
         // io.sockets.emit('message', "this goes to everyone");
 
+      }
+    );
+
+    socket.on('hit',
+      function(data) {
+        console.log("Received: 'hit' " + data.size + " - " + data.fp);
+        socket.broadcast.emit('hit', data);
       }
     );
     

@@ -8,9 +8,9 @@ function Bird(color) {
 
 	this.y = height/2;
 	this.x = 50;
-	this.size = 32;
+	this.size = 32.0;
 
-	this.gravity = 0.6 * 0.6;
+	this.gravity = 0.6 * 0.6 + this.size * 0.0005;
 	this.lift = -15 * 0.6;
 	this.velocity = 0;
 

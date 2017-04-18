@@ -7,14 +7,23 @@ function setup() {
   createCanvas(400, 600);
   background(0);
 
-  // socket = io.connect('http://localhost:5000');
-  socket = io.connect('https://p5jumpy.herokuapp.com');
+  socket = io.connect('http://localhost:5000');
+  // socket = io.connect('https://p5jumpy.herokuapp.com');
   
   // event called 'mouse' and write an anonymous callback function
   socket.on('key',
     function(data) {
-      console.log("Got: " + data.fc + ", CF: " + frameCount + ", diff:" + (data.cf-frameCount));
+      // console.log("Got: " + data.fc + ", CF: " + frameCount + ", diff:" + (data.cf-frameCount));
+      enemy.y = data.y;
       enemy.up();
+      enemy.size = data.size;
+    }
+  );
+
+  socket.on('hit',
+    function(data) {
+      console.log("Got enemy's hit: " + data.size);
+      enemy.size = data.size;
     }
   );
 
@@ -31,13 +40,11 @@ function draw() {
 		pipes[i].update();
 
 		if (pipes[i].hits(bird)) {
-			console.log("HIT");
-			bird.size++;
-		}
-
-    if (pipes[i].hits(enemy)) {
-			console.log("HIT");
-			enemy.size++;
+      if (bird.color == 0) {
+        bird.size += 0.8;
+        // frameCount = 0;
+        // sendHit(bird.size, frameCount);
+      }
 		}
 
 		if (pipes[i].offscreen()) {
@@ -45,21 +52,32 @@ function draw() {
 		}
 	}
 
-	bird.update();
   enemy.update();
-  bird.show();
+	bird.update();
   enemy.show();
+  bird.show();
 
-	if (frameCount % 60 == 0) {
+  frameCounter();
+
+	if (frameCount % 10 == 0) {
 		pipes.push(new Pipe());
+    if (bird.size > 40)
+      bird.size -= 0.005 * bird.size;
 	}
+}
+
+function frameCounter() {
+  noStroke();
+  fill(255);
+  textSize(24);
+  text("FC: " + frameCount, 400-140, 600-20);
 }
 
 function keyPressed() {
 	if (key == ' ') {
     console.log("sendKey " + frameCount);
 		bird.up();
-    sendKey(frameCount);
+    sendKey(frameCount, bird);
 	}
 }
 
@@ -69,12 +87,23 @@ function mousePressed() {
   sendKey(frameCount);
 }
 
-function sendKey(frameCount) {
+function sendKey(frameCount, bird) {
   console.log("send key: " + frameCount);
 
   var data = {
-    fc: frameCount
+    fc: frameCount,
+    size: bird.size,
+    y: bird.y
   };
 
   socket.emit('key', data);
+}
+
+function sendHit(size, framePos) {
+  var data = {
+    size: size,
+    fp: framePos
+  };
+  console.log("send hit: " + size);
+  socket.emit('hit', data);
 }
